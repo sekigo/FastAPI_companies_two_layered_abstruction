@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from sqlalchemy import String, select
 from app.database import Base, engine
 from app.routers import companies
 

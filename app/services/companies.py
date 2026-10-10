@@ -1,9 +1,8 @@
-from fastapi import HTTPException
-from app.schemas import CompanyCreate, CompanyRead,CompanyUpdate
-from app.database import SessionDep
 from app.models import Company
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
+from sqlalchemy.orm import Session
+from app.schemas import CompanyCreate, CompanyUpdate
 
 class CompanyNotFoundError(Exception):
     pass
@@ -12,17 +11,17 @@ class CompanyConflictError(Exception):
     pass
 
 
-def list_companies(session: SessionDep)-> list[CompanyRead]:
+def list_companies(session: Session)-> list[Company]:
     return session.scalars(select(Company)).all()
 
-def get_company(session: SessionDep, company_id: int)-> CompanyRead:
+def get_company(session: Session, company_id: int)-> Company:
     company = session.get(Company, company_id)
     if company is None:
         raise CompanyNotFoundError
     return company
 
 
-def create_company(session: SessionDep, data: CompanyCreate)-> CompanyRead:
+def create_company(session: Session, data: CompanyCreate)-> Company:
     new_company = Company(**data.model_dump())
     session.add(new_company)
     try:
@@ -36,7 +35,7 @@ def create_company(session: SessionDep, data: CompanyCreate)-> CompanyRead:
 
 
 
-def delete_company(session: SessionDep, company_id: int)-> None:
+def delete_company(session: Session, company_id: int)-> None:
     company_exist = session.get(Company, company_id)
     if company_exist is None:
         raise CompanyNotFoundError
@@ -44,7 +43,7 @@ def delete_company(session: SessionDep, company_id: int)-> None:
     session.commit()
 
 
-def update_company(session: SessionDep, company_id: int, data: CompanyUpdate)-> CompanyRead:
+def update_company(session: Session, company_id: int, data: CompanyUpdate)-> Company:
     updating_company = session.get(Company, company_id)
     if updating_company is None:
         raise CompanyNotFoundError

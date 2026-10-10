@@ -2,8 +2,6 @@ from fastapi import APIRouter
 from fastapi import HTTPException
 from app.services import companies as company_service
 from fastapi import status
-from sqlalchemy.orm import Session
-from app.models import Company
 from app.schemas import CompanyCreate, CompanyRead, CompanyUpdate
 from app.database import SessionDep
 
