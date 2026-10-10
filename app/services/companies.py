@@ -14,11 +14,14 @@ class CompanyConflictError(Exception):
 def list_companies(session: Session)-> list[Company]:
     return session.scalars(select(Company)).all()
 
+
+
 def get_company(session: Session, company_id: int)-> Company:
     company = session.get(Company, company_id)
     if company is None:
         raise CompanyNotFoundError
     return company
+
 
 
 def create_company(session: Session, data: CompanyCreate)-> Company:
