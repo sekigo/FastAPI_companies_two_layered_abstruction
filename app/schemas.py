@@ -8,13 +8,17 @@ class CompanyRead(BaseModel):
     id: int
     name: str
     industry: str
+    description: str | None
 
 
 class CompanyCreate(BaseModel):
     name: str
     industry: str
+    description: str | None
+
 
 
 class CompanyUpdate(BaseModel):
     name: str | None = None
     industry: str | None = None
+    description: str | None
